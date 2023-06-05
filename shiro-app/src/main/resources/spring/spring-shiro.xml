@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="securityManager" class="org.apache.shiro.mgt.DefaultSecurityManager">
+        <property name="cacheManager" ref="cacheManager"></property>
+        <property name="authenticator" ref="authenticator"></property>
+
+        <!--多Realms的配置,直接将Realms配置给SecurityManager-->
+        <property name="realms">
+            <list>
+                <ref bean="dbRealm"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 设置 SecurityUtils,使用 MethodInvokingFactoryBean,将实体类securityManager通过setSecurityManager方法注入SecurityUtils中  -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <!--shiro 缓存-->
+    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!--<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"></property>-->
+    </bean>
+
+    <!--多Realms配置时用到认证器-->
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <!--配置认证策略-->
+        <property name="authenticationStrategy">
+            <!--第一个认证成功：org.apache.shiro.authc.pam.FirstSuccessfulStrategy-->
+            <!--至少有一个认证策略认证成功：org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy-->
+
+            <!--所有的Realms都认证成功了,才通过-->
+            <bean class="org.apache.shiro.authc.pam.AllSuccessfulStrategy"></bean>
+        </property>
+    </bean>
+
+    <!-- 自定义的Realm -->
+    <bean id="dbRealm" class="com.sff.common.DbRealm">
+        <property name="cachingEnabled" value="true"></property>
+        <property name="authenticationCachingEnabled" value="true"></property>
+        <property name="authenticationCacheName" value="authenticationCache"></property>
+        <property name="authorizationCachingEnabled" value="true"></property>
+        <property name="authorizationCacheName" value="authorizationCache"></property>
+    </bean>
+
+    <!--LifecycleBeanPostProcessor可以调用配置在spring容器中shiro bean的生命周期方法-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+
+    <!--启用容器中的shiro注解,前提是必须启用LifecycleBeanPostProcessor-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor"></bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"></property>
+    </bean>
+
+
+</beans>

@@ -1,0 +1,13 @@
+<!-- 权限管理menu -->
+<div id="sidebar">
+    <ul class="side-menu no-list-style">
+        #if($!authorityClient.accessDecision("union:privilege"))
+            <li #if($privilege_left==1) class="active" #end ><a href="/privilege/index"><i
+                    class="icon-angle pull-right"></i><i class="icon-document2"></i><span>资源管理</span></a></li>
+            <li #if($privilege_left==2) class="active" #end ><a href="/role/index"><i class="icon-angle pull-right"></i><i
+                    class="icon-document3"></i><span>角色管理</span></a></li>
+            <li #if($privilege_left==3) class="active" #end ><a href="/mngUser/index"><i
+                    class="icon-angle pull-right"></i><i class="icon-document2"></i><span>用户管理</span></a></li>
+        #end
+    </ul>
+</div>

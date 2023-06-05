@@ -1,0 +1,151 @@
+#set($page_title="用户管理")
+#set($nav_head=5)
+#set($privilege_left=3)
+<div class="fixes-top">
+    <!--sidebar-menu-->
+    #parse('privilege/privilege_menu.vm')
+    <!--end-sidebar-menu-->
+
+    <!--container-->
+
+    <div id="frame">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li><a href="/privilege/index">权限管理</a></li>
+                <li class="active">$page_title</li>
+            </ol>
+            <div class="data-filter clearfix">
+                <form class="form-inline" id="queryForm" method="post" action="/mngUser/index">
+                    <input type="hidden" id="pageIndex" name="pageIndex"></input>
+
+
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="form-group-inline">
+                                <label class="xs-label" for="field-1">erp账号：</label>
+                                <input class="form-control" name="erp" id="erp" value="$!erp" type="text"
+                                       placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="xs-pull">
+                                <div class="group-inline-2x"><span><a
+                                        class="btn btn-md btn-info btn-xs-block searchUsers">查询</a></span></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <a href="#s1" class="btn-primary btn newUser" data-toggle="modal"><i class="icon-plus3"></i>创建用户</a>
+            </div>
+
+            <div class="blk-2x"></div>
+            <div class="panel border clearfix">
+                <div class="table-responsive datetable">
+                    <table class="table table-striped margin-0">
+                        <thead>
+                        <tr>
+                            <th>erp账号</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            #if( $page.data.isEmpty())
+                            <td>#if($error) $!error #else 没有查询到符合条件的数据#end</td>
+                            #else
+                                #foreach($u in $page.data)
+                                <tr>
+                                    <td class="textL">$!u.userId</td>
+                                    <td>
+                                        <a href="#s1" data-toggle="modal" class="text-info modUserOp"
+                                           data-userid="$!u.userId">修改</a>
+                                        #if($!u.status == 0)
+                                            <a href="#s2" data-toggle="modal" class="text-info modStatusOp"
+                                               data-userid="$!u.userId" data-status="1">禁用</a>
+                                        #end
+                                        #if($!u.status == 1)
+                                            <a href="#s2" data-toggle="modal" class="text-info modStatusOp"
+                                               data-userid="$!u.userId" data-status="0">启用</a>
+                                        #end
+                                        <a href="#s3" data-toggle="modal" class="text-info delUserOp"
+                                           data-userid="$!u.userId">删除</a>
+                                    </td>
+                                </tr>
+                                #end
+                            #end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            #parse('layout/page.vm')
+        </div>
+
+    </div>
+
+</div>
+
+#parse('privilege/user_new.vm')
+<div class="modal" id="s3" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="control modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header"><a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4 class="modal-title">确认</h4>
+            </div>
+            <div class="modal-body">
+                <div class="padding-tb-6x font-2x text-center"> 该操作将删除已关联的用户角色，是否确认？</div>
+            </div>
+            <div class="modal-footer">
+                <input id='uId' name='uId' type="hidden">
+                <button type="button" class="btn btn-primary delUser">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="s2" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="control modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header"><a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4 class="modal-title">确认</h4>
+            </div>
+            <div class="modal-body">
+                <div class="padding-tb-6x font-2x text-center"> 是否确认？</div>
+            </div>
+            <div class="modal-footer">
+                <input id='sId' name='sId' type="hidden">
+                <input id='uStatus' name='uStatus' type="hidden">
+                <button type="button" class="btn btn-primary modStatus">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet"
+      href="#springUrl('')/static/css/ztree/zTreeStyle/zTreeStyle.css"/>
+<link rel="stylesheet" href="#springUrl('')/static/css/ztree/demo.css"
+      type="text/css">
+<style type="text/css">
+    .ztree li span.button.add {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -144px 0;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+</style>
+#define($jsblock)
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.exedit-3.5.js"></script>
+<script>
+    var formId = "queryForm";
+    require(['privilege/mngUser', 'tools/util'], function () {
+    });
+</script>
+#end

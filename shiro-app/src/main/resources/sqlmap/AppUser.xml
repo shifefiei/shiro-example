@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sff.dao.mapper.AppUserMapper">
+
+    <select id="findListByPage" parameterType="java.util.Map" resultType="com.sff.domain.AppUser">
+        SELECT id AS id,
+        user_id AS userId,
+        status AS status,
+        creator AS creator,
+        created_time AS createdTime,
+        modified_time AS modifiedTime
+        FROM app_user
+        WHERE 1=1
+        <if test="userId != null">
+			AND user_id LIKE CONCAT('%', #{userId}, '%')
+        </if>
+        <if test="status != null">
+			AND status = #{status}
+        </if>
+        ORDER BY id DESC
+        LIMIT #{start},#{pageSize}
+    </select>
+
+    <select id="getCount" parameterType="java.util.Map" resultType="Integer">
+        SELECT count(1) FROM app_user
+        <if test="userId != null">
+            <![CDATA[where user_id LIKE CONCAT('%', #{userId}, '%')]]>
+        </if>
+    </select>
+
+    <select id="findById" resultType="com.sff.domain.AppUser" parameterType="java.lang.String">
+        select id, user_id userId,status status from app_user
+        where user_id = #{userId}
+    </select>
+
+    <select id="findRolesById" resultType="com.sff.domain.AppUserRole"
+            parameterType="java.lang.String">
+        select id, user_id userId,role_id roleId from app_user_role
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUser" parameterType="com.sff.domain.AppUser">
+        insert into app_user (user_id,creator,created_time)
+        values (
+          #{userId},#{creator},IFNULL(#{createdTime}, NOW()))
+    </insert>
+
+    <update id="updateByUserId" parameterType="com.sff.domain.AppUser">
+        update app_user
+        set status = #{status}
+        where user_id = #{userId}
+    </update>
+
+    <insert id="insertUserRole" parameterType="com.sff.domain.AppUser">
+        insert into app_user_role (role_id,user_id)
+        values (#{roleId},#{userId})
+    </insert>
+
+    <delete id="deleteUserRoleByUserId" parameterType="map">
+        delete from app_user_role
+        where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserRoleByRoleId" parameterType="map">
+        delete from app_user_role
+        where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteUser" parameterType="map">
+        delete from app_user
+        where user_id = #{userId}
+    </delete>
+
+
+
+</mapper>

@@ -1,0 +1,104 @@
+#set($page_title="角色管理")
+#set($nav_head=5)
+#set($privilege_left=2)
+<div class="fixes-top">
+    <!--sidebar-menu-->
+    #parse('privilege/privilege_menu.vm')
+    <!--end-sidebar-menu-->
+
+    <!--container-->
+
+    <form id="queryForm" method="post" action="/role/index">
+        <input type="hidden" id="pageIndex" name="pageIndex"></input>
+    </form>
+    <div id="frame">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li><a href="/privilege/index">权限管理</a></li>
+                <li class="active">$page_title</li>
+            </ol>
+            <div>
+                <a href="#s1" class="btn-primary btn newRole" data-toggle="modal"><i class="icon-plus3"></i>创建角色</a>
+            </div>
+
+            <div class="blk-2x"></div>
+            <div class="panel border clearfix">
+                <div class="table-responsive datetable">
+                    <table class="table table-striped margin-0">
+                        <thead>
+                        <tr>
+                            <th>角色</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            #if( $page.data.isEmpty())
+                            <td>#if($error) $!error #else 没有查询到符合条件的数据#end</td>
+                            #else
+                                #foreach($r in $page.data)
+                                <tr>
+                                    <td class="textL">$!r.roleName</td>
+                                    <td>
+                                        <a href="#s1" data-toggle="modal" class="text-info modRoleOp"
+                                           data-roleid="$!r.roleId">修改</a>
+                                        <a href="#s3" data-toggle="modal" class="text-info delRoleOp"
+                                           data-roleid="$!r.roleId">删除</a>
+                                    </td>
+                                </tr>
+                                #end
+                            #end
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            #parse('layout/page.vm')
+        </div>
+
+    </div>
+
+</div>
+
+#parse('privilege/role_new.vm')
+<div class="modal" id="s3" tabindex="-1" role="dialog" aria-hidden="false">
+    <div class="control modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header"><a class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4 class="modal-title">确认</h4>
+            </div>
+            <div class="modal-body">
+                <div class="padding-tb-6x font-2x text-center"> 该操作将删除已关联的用户角色，是否确认？</div>
+            </div>
+            <div class="modal-footer">
+                <input id='rId' name='rId' type="hidden">
+                <button type="button" class="btn btn-primary delRole">确定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet"
+      href="#springUrl('')/static/css/ztree/zTreeStyle/zTreeStyle.css"/>
+<link rel="stylesheet" href="#springUrl('')/static/css/ztree/demo.css"
+      type="text/css">
+<style type="text/css">
+    .ztree li span.button.add {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -144px 0;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+</style>
+#define($jsblock)
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.exedit-3.5.js"></script>
+<script>
+    var formId = "queryForm";
+    require(['privilege/role'], function () {
+    });
+</script>
+#end

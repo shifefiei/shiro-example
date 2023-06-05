@@ -1,0 +1,141 @@
+@font-face {
+    font-family: 'lm-jd';
+    src: url('../fonts/lm-jd.eot?9omqs');
+    src: url('../fonts/lm-jd.eot?#iefix9omqs') format('embedded-opentype'), url('../fonts/lm-jd.woff?9omqs') format('woff'), url('../fonts/lm-jd.ttf?9omqs') format('truetype'), url('../fonts/lm-jd.svg?9omqs#jd') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    font-family: 'lm-jd';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    padding-right: 5px; /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-usermanage:before {
+    content: "\e61b";
+}
+
+.icon-management:before {
+    content: "\e61c";
+}
+
+.icon-sysytem:before {
+    content: "\e61d";
+}
+
+.icon-arrow-down:before {
+    content: "\e600";
+}
+
+.icon-angle-left:before, .icon-arrow-left:before {
+    content: "\e601";
+}
+
+.icon-angle-right:before, .icon-arrow-right:before {
+    content: "\e602";
+}
+
+.icon-arrow-up:before {
+    content: "\e603";
+}
+
+.icon-bell:before {
+    content: "\e604";
+}
+
+.icon-calendar:before {
+    content: "\e605";
+}
+
+.icon-calendar2:before {
+    content: "\e606";
+}
+
+.icon-chart:before {
+    content: "\e607";
+}
+
+.icon-check:before {
+    content: "\e608";
+}
+
+.icon-close:before {
+    content: "\e609";
+}
+
+.icon-document:before {
+    content: "\e60a";
+}
+
+.icon-document2:before {
+    content: "\e60b";
+}
+
+.icon-document3:before {
+    content: "\e60c";
+}
+
+.icon-document4:before {
+    content: "\e60d";
+}
+
+.icon-document5:before {
+    content: "\e60e";
+}
+
+.icon-earth:before {
+    content: "\e60f";
+}
+
+.icon-image:before {
+    content: "\e610";
+}
+
+.icon-plus:before {
+    content: "\e611";
+}
+
+.icon-sale:before {
+    content: "\e612";
+}
+
+.icon-store:before {
+    content: "\e613";
+}
+
+.icon-store2:before {
+    content: "\e614";
+}
+
+.icon-structure:before {
+    content: "\e615";
+}
+
+.icon-user:before {
+    content: "\e616";
+}
+
+.icon-user2:before {
+    content: "\e617";
+}
+
+.icon-user3:before {
+    content: "\e618";
+}
+
+.icon-user4:before {
+    content: "\e619";
+}
+
+.icon-viewport:before {
+    content: "\e61a";
+}
+

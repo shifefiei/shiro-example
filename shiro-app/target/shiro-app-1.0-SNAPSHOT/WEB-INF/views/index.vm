@@ -1,0 +1,24 @@
+#define($jsblock)
+#*<script src="$baseurl/static/js/test/test.js?js_v=$js_v"></script>*#
+#end
+#set($page_title="权限管理系统")
+<div class="fixes-top">
+    <!--sidebar-menu-->
+    <!--end-sidebar-menu-->
+
+    <!--container-->
+
+    <div id="frame">
+        <div class="container-fluid">
+            <div class="welcome clearfix">
+                <div class="row">
+                    <div class="col-sm-5 col-xs-12">
+                        <h4>欢迎进入</h4>
+                        <h1 class="text-info">$!msg_index</h1>
+                    </div>
+                    <div class="col-sm-7 col-xs-12"> <img src='$!baseurl/static/images/welcome.png' /> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sff.dao.mapper.AppAuthorityMapper">
+
+    <resultMap id="BaseResultMap" type="com.sff.domain.AppAuthority">
+        <id column="id" property="id"/>
+        <result column="pid" property="pId"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="level" property="level"/>
+        <result column="has_next" property="hasNext"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+	    id, pid , name, code, level, has_next
+	</sql>
+
+    <select id="isExistById" parameterType="java.lang.Long" resultType="java.lang.Integer">
+     select count(*) from app_authority
+     where id = #{id}  
+  	</select>
+
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app_authority
+    </select>
+
+
+    <select id="getChildById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_authority where pid=#{pId}
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from app_authority
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from app_authority
+        where id = #{id}
+    </delete>
+
+    <delete id="deletePriRoleById" parameterType="map">
+        delete from app_role_authority
+        where privilege_id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.sff.domain.AppAuthority">
+        insert into app_authority (id, pid, name, code, level)
+        values (#{id}, #{pId}, #{name}, #{code}, #{level})
+    </insert>
+
+    <update id="updateById" parameterType="com.sff.domain.AppAuthority">
+      update app_authority
+      set pid = #{pId},name = #{name},level = #{level},code = #{code}
+      where id = #{id}
+  </update>
+
+    <update id="updateHasNextById" parameterType="com.sff.domain.AppAuthority">
+        update app_authority
+            set has_next = #{hasNext}
+            where id = #{id}
+    </update>
+
+</mapper>

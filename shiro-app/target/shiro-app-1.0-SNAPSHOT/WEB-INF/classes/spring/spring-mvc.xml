@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-autowire="byName">
+
+    <import resource="classpath*:spring/application.xml"/>
+
+    <!--响应静态资源-->
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+
+    <!--配置velocity引擎-->
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <!--velocity文件存放的路径-->
+        <property name="resourceLoaderPath" value="/WEB-INF/views/"/>
+
+        <!--防止velocity页面乱码-->
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=UTF-8</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--配置velocity视图解析器-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="layoutUrl" value="layout/default.vm"/>
+        <property name="prefix" value=""/>
+        <property name="suffix" value=".vm"/>
+        <!--velocity页面显示乱码的解决的最重要的一步-->
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+
+        <property name="dateToolAttribute" value="dateTool"/>
+        <property name="numberToolAttribute" value="numberTool"/>
+
+    </bean>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="false">
+            <bean id="fastJsonHttpMessageConverter"
+                  class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+
+    <!--定义权限类客户端-->
+    <bean id="authorityClient" class="com.sff.common.AuthorityClient"></bean>
+
+    <bean id="securityInterceptor" class="com.sff.common.SecurityInterceptor">
+        <property name="authorityClient" ref="authorityClient"/>
+    </bean>
+
+    <!-- 单点登录JSF服务接口 -->
+    <!-- 单点登录拦截器配置 -->
+    <mvc:interceptors>
+
+        <mvc:interceptor>
+            <!--拦截指定的请求路径-->
+            <mvc:mapping path="/**"/>
+            <ref bean="securityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+</beans>

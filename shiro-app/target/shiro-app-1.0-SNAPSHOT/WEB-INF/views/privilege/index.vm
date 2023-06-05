@@ -1,0 +1,93 @@
+#set($page_title="资源管理")
+#set($nav_head=5)
+#set($privilege_left=1)
+
+<div class="fixes-top">
+    <!--sidebar-menu-->
+    #parse('privilege/privilege_menu.vm')
+    <!--end-sidebar-menu-->
+
+    <!--container-->
+
+    <div id="frame">
+        <div class="container-fluid">
+            <ol class="breadcrumb">
+                <li><a href="/privilege/index">权限管理</a></li>
+                <li class="active">$page_title</li>
+            </ol>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <div class="content_wrap">
+                        <div class="zTreeDemoBackground left ">
+                            <ul id="treeDemo" class="ztree"></ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-9 col-md-9 col-sm-12">
+                    <div id="result" style="display:none">
+                        <div class="data-filter clearfix">
+                            <form class="form-inline" id="urlForm" method="post" action="/privilege/update">
+                                <input id='id' name='id' type="hidden">
+                                <input id='pId' name='pId' type="hidden">
+                                <input id='level' name='level' type="hidden">
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group-inline">
+                                            <label class="xs-label" for="field-1">资源名称：</label>
+                                            <input class="form-control" name="name" id="name" type="text"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group-inline">
+                                            <label class="xs-label" for="field-1">资源码：</label>
+                                            <input class="form-control" name="code" id="code" type="text"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="xs-pull">
+                                            <div class="group-inline-2x"><span><a
+                                                    class="btn btn-md btn-info btn-xs-block savePri">保存</a></span></div>
+                                        </div>
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<link rel="stylesheet"
+      href="#springUrl('')/static/css/ztree/zTreeStyle/zTreeStyle.css"/>
+<link rel="stylesheet" href="#springUrl('')/static/css/ztree/demo.css"
+      type="text/css">
+<style type="text/css">
+    .ztree li span.button.add {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -144px 0;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+</style>
+#define($jsblock)
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.core-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.excheck-3.5.js"></script>
+<script type="text/javascript"
+        src="#springUrl('')/static/js/ztree/jquery.ztree.exedit-3.5.js"></script>
+<script>
+    var formId = "urlForm";
+    require(['privilege/privilege'], function () {
+    });
+</script>
+#end

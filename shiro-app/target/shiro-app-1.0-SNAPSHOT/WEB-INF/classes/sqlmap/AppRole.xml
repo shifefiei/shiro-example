@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sff.dao.mapper.AppRoleMapper">
+
+    <resultMap id="roleResult" type="com.sff.domain.AppRole">
+        <id column="role_id" property="roleId"/>
+        <result column="role_name" property="roleName"/>
+        <collection property="privileges" javaType="java.util.List" resultMap="privilegeResult"/>
+    </resultMap>
+
+    <resultMap id="privilegeResult" type="com.sff.domain.AppRoleAuthority">
+        <id column="rp_id" property="id"/>
+        <result column="rp_role_id" property="roleId"/>
+        <result column="rp_privilege_id" property="privilegeId"/>
+    </resultMap>
+
+
+    <select id="findByRoleId" resultMap="roleResult" parameterType="map">
+        <![CDATA[
+            select  r.role_id as role_id,r.role_name as role_name,rp.id as rp_id,
+            rp.role_id as rp_role_id,rp.privilege_id as rp_privilege_id
+            from app_role r,app_role_authority rp
+        ]]>
+        <if test="containParent != null"><![CDATA[,app_authority p ]]></if>
+        where r.role_id = rp.role_id and r.role_id = #{roleId}
+        <if test="containParent != null"><![CDATA[and p.id=rp.privilege_id and p.has_next=0]]></if>
+    </select>
+
+
+    <select id="findAll" resultType="com.sff.domain.AppRole">
+        select role_id roleId,role_name roleName from app_role
+    </select>
+
+    <select id="findById" resultType="com.sff.domain.AppRole" parameterType="java.lang.Long">
+        select role_id roleId,role_name roleName from app_role
+        where role_id = #{roleId}
+    </select>
+
+    <select id="findPrivilegeByRoleId" resultType="com.sff.domain.AppRoleAuthority" parameterType="map">
+        <![CDATA[select rp.id as id,rp.role_id as roleId,rp.privilege_id as privilegeId from app_role_authority rp]]>
+        <if test="containParent != null"><![CDATA[,mng_privilege p]]></if>
+        where rp.role_id = #{roleId}
+        <if test="containParent != null"><![CDATA[and p.id=rp.privilege_id and p.has_next=0]]></if>
+    </select>
+
+    <select id="findListByPage" parameterType="java.util.Map" resultType="com.sff.domain.AppRole">
+		SELECT role_id roleId,role_name roleName FROM app_role
+		LIMIT #{start},#{pageSize}
+	</select>
+
+
+    <select id="getCount" parameterType="java.util.Map" resultType="Integer">
+		SELECT count(1) FROM app_role
+	</select>
+
+
+    <insert id="insertRole" parameterType="com.sff.domain.AppRole">
+        insert into app_role (role_id,role_name)
+        values (#{roleId},#{roleName})
+    </insert>
+
+    <update id="updateByRoleId" parameterType="com.sff.domain.AppRole">
+        update app_role  set role_name = #{roleName} where role_id = #{roleId}
+    </update>
+
+    <insert id="insertRolePrivilege" parameterType="com.sff.domain.AppRoleAuthority">
+        insert into app_role_authority (role_id,privilege_id)  values (#{roleId},#{privilegeId})
+    </insert>
+
+    <delete id="deleteRolePrivilegeByRoleId" parameterType="map">
+        delete from app_role_authority where role_id = #{roleId}
+    </delete>
+
+    <delete id="deleteRole" parameterType="map">delete from app_role where role_id = #{roleId}</delete>
+
+
+</mapper>

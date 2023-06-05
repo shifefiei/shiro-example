@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sff.dao.mapper.AppRoleUserMapper">
+    <select id="findByUserId" parameterType="string" resultType="com.sff.domain.AppUserRole">
+	<![CDATA[
+        select r.id id,r.role_id roleId,r.user_id userId from app_user_role r,app_user u
+		where r.user_id = u.user_id and u.user_id = #{user_id} and u.status=0
+        ]]>
+	</select>
+
+    <select id="findUriByIds" parameterType="java.util.List" resultType="string">
+        select code from app_authority where id in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findResourceIds" parameterType="java.util.List" resultType="long">
+        select distinct privilege_id from app_role_authority where role_id in
+        <foreach item="item" index="index" collection="roleIds"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+</mapper>
